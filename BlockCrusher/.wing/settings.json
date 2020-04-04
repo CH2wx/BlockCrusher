@@ -1,0 +1,7 @@
+{
+    "search.exclude": {
+        "**/bin-debug": true,
+        "**/bin-release": true
+    },
+    "git.path": "D:/Program Files (x86)/Git"
+}
