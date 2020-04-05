@@ -608,6 +608,7 @@ var MainScene = (function (_super) {
         var ballpoint = Vector2.MoveForDir(this.ball.x, this.ball.y, this.config.ballDir, this.config.ballSpeed);
         this.ball.x = ballpoint.x;
         this.ball.y = ballpoint.y;
+        // console.log(this.ball.x, this.ball.y);
     };
     /**
      * 设置可以移动方向的状态
@@ -712,13 +713,6 @@ var Config = (function () {
     return Config;
 }());
 __reflect(Config.prototype, "Config");
-var MainEui = (function () {
-    //eui中id的引用
-    function MainEui() {
-    }
-    return MainEui;
-}());
-__reflect(MainEui.prototype, "MainEui");
 var Vector2 = (function () {
     function Vector2(x, y) {
         this.x = x;

@@ -4,11 +4,28 @@
  * 并在主域中渲染此 SharedCanvas
  */
 
+ //创建开放数据域显示对象，离屏画布的显示对象可直接在主域中通过以下的方式进行创建，创建的显示对象为 egre.Bitmap 类型，可直接添加到舞台上。
+var platform = window.platform;
+this.bitmap = platform.openDataContext.createDisplayObject(null, this.stage.stageWidth, this.stage.stageHeight);
 
+//通过主域与开放数据域的单向数据接口进行通讯，主域可向开放数据域单方向发送消息。
+platform.openDataContext.postMessage({
+  isRanking : this.isRankClick,
+  text : "egret",
+  year : (new Date()).getFullYear(),
+  command : "open"
+});
 
-
-
-
+//子域接收信息
+wx.onMessage((data) => {
+  if(data.command == 'open'){
+    //显示开放域
+    if(!hasCreateScene){
+      //创建并初始化
+      hasCreateScene = createScene();
+    }
+  }
+});
 
 /**
  * 资源加载组，将所需资源地址以及引用名进行注册
