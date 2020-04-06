@@ -12,6 +12,7 @@ var MainScene = (function (_super) {
     __extends(MainScene, _super);
     function MainScene() {
         var _this = _super.call(this) || this;
+        _this.isRankClick = false;
         _this.rectArr = new Array();
         return _this;
     }
@@ -27,6 +28,16 @@ var MainScene = (function (_super) {
      * 游戏开始之前初始化场景的函数
      */
     MainScene.prototype.initGameScene = function () {
+        this.bg.width = this.stage.stageWidth;
+        this.bg.height = this.stage.stageHeight;
+        this.overPanel.width = this.stage.stageWidth;
+        this.overPanel.height = this.stage.stageHeight;
+        var centerX = this.stage.stageWidth / 2 - this.player.width / 2;
+        this.scoreGroup.x = centerX;
+        this.ball.x = centerX;
+        this.ball.y = this.stage.stageHeight / 2;
+        this.player.x = centerX;
+        this.player.y = this.stage.stageHeight - this.stage.stageHeight / 10;
         //隐藏储存方块的容器，并初始化方块数组
         this.rectContainer.visible = false;
         this.rectArr = new Array();
@@ -48,6 +59,43 @@ var MainScene = (function (_super) {
      */
     MainScene.prototype.closeOverPanel = function () {
         this.visible = false;
+        console.log("点击排行榜");
+        var plathform = window.platform;
+        if (!this.isRankClick) {
+            //处理遮罩,避免开放域数据影响主域
+            this.rankingListMask = new egret.Shape();
+            this.rankingListMask.graphics.beginFill(0x000000, 1);
+            this.rankingListMask.graphics.drawRect(0, 0, this.stage.width, this.stage.height);
+            this.rankingListMask.graphics.endFill();
+            this.rankingListMask.alpha = 0.4;
+            //设置为true,以免触摸到下面的按钮
+            this.rankingListMask.touchEnabled = true;
+            this.addChildAt(this.rankingListMask, 999);
+            //让排行榜按钮显示在容器内
+            this.addChild(this.rankingListMask);
+            //显示开放域数据
+            this.bitmap = plathform.openDataContext.createDisplayObject(null, this.stage.stageWidth, this.stage.stageHeight);
+            this.addChild(this.bitmap);
+            //主域向子域发送数据
+            plathform.openDataContext.postMessage({
+                isRanking: this.isRankClick,
+                text: "egret",
+                year: (new Date()).getFullYear(),
+                command: "open"
+            });
+            this.isRankClick = true;
+        }
+        else {
+            this.bitmap.parent && this.bitmap.parent.removeChild(this.bitmap);
+            this.rankingListMask.parent && this.rankingListMask.parent.removeChild(this.rankingListMask);
+            this.isRankClick = false;
+            plathform.openDataContext.postMessage({
+                isRanking: this.isRankClick,
+                text: "egret",
+                year: (new Date()).getFullYear(),
+                command: "close"
+            });
+        }
     };
     /**
      * 点击开始游戏时调用该方法并开始游戏
@@ -234,7 +282,7 @@ var MainScene = (function (_super) {
                 }
             }
         }
-        if (this.ball.y >= this.height || this.ball.y >= this.stage.height) {
+        if (this.ball.y >= this.stage.stageHeight) {
             this.gameOver();
             return;
         }
@@ -252,6 +300,46 @@ var MainScene = (function (_super) {
         this.left = forbidType != this.config.directionType[0];
         this.right = forbidType != this.config.directionType[1];
         this.up = forbidType != this.config.directionType[2];
+    };
+    //显示微信排行榜
+    MainScene.prototype.obBtnRankingClick = function () {
+        console.log("点击排行榜");
+        var plathform = window.platform;
+        if (!this.isRankClick) {
+            //处理遮罩,避免开放域数据影响主域
+            this.rankingListMask = new egret.Shape();
+            this.rankingListMask.graphics.beginFill(0x000000, 1);
+            this.rankingListMask.graphics.drawRect(0, 0, this.stage.width, this.stage.height);
+            this.rankingListMask.graphics.endFill();
+            this.rankingListMask.alpha = 0.4;
+            //设置为true,以免触摸到下面的按钮
+            this.rankingListMask.touchEnabled = true;
+            this.addChildAt(this.rankingListMask, 999);
+            //让排行榜按钮显示在容器内
+            this.addChild(this.rankingListMask);
+            //显示开放域数据
+            this.bitmap = plathform.openDataContext.createDisplayObject(null, this.stage.stageWidth, this.stage.stageHeight);
+            this.addChild(this.bitmap);
+            //主域向子域发送数据
+            plathform.openDataContext.postMessage({
+                isRanking: this.isRankClick,
+                text: "egret",
+                year: (new Date()).getFullYear(),
+                command: "open"
+            });
+            this.isRankClick = true;
+        }
+        else {
+            this.bitmap.parent && this.bitmap.parent.removeChild(this.bitmap);
+            this.rankingListMask.parent && this.rankingListMask.parent.removeChild(this.rankingListMask);
+            this.isRankClick = false;
+            plathform.openDataContext.postMessage({
+                isRanking: this.isRankClick,
+                text: "egret",
+                year: (new Date()).getFullYear(),
+                command: "close"
+            });
+        }
     };
     return MainScene;
 }(eui.Component));

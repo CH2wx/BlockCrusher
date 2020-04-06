@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="MainSceneSkin" width="640" height="1120" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
-	<e:Image id="Bg" source="bg.jpg" left="0" right="0" top="0" bottom="0" verticalCenter="0" horizontalCenter="0" percentHeight="100%" percentWidth="100%"/>
-	<e:Image id="player" source="bat_huge_png" height="25" x="272" y="1010"/>
-	<e:Group id="scoreGroup" left="0" right="0" bottom="0" top="0">
+	<e:Image id="bg" source="bg.jpg" x="0" y="0"/>
+	<e:Image id="player" source="bat_huge_png" height="25"/>
+	<e:Group id="scoreGroup">
 		<e:Rect id="scoreBg" width="250" height="40" strokeColor="0x577f74" alpha="0.3" fillColor="0x5f7572" horizontalCenter="4" y="50"/>
 		<e:Label id="scoreLabel" text="分数：" height="40" width="115" anchorOffsetX="0" verticalAlign="middle" textAlign="center" horizontalCenter="-75.5" y="50"/>
 		<e:Label id="score" text="Label" height="40" width="150" anchorOffsetX="0" textAlign="left" verticalAlign="middle" horizontalCenter="35" y="50"/>
 	</e:Group>
-	<e:Group id="rectContainer" width="640" height="649" x="0" y="0" anchorOffsetX="0" anchorOffsetY="0"/>
+	<e:Group id="rectContainer" x="0" y="0" anchorOffsetX="0" anchorOffsetY="0"/>
 	<e:Label id="gameName" text="打  砖  块" height="60" fontFamily="Arial" textColor="0xf25e5e" size="50" textAlign="center" anchorOffsetX="0" verticalAlign="middle" y="282" horizontalCenter="0"/>
-	<e:Rect width="130.26" height="80" x="606.57" y="-55.04" ellipseWidth="62" anchorOffsetX="0" anchorOffsetY="0" fillColor="0x47912f" rotation="45" visible="false"/>
-	<e:Rect width="130.26" height="80" x="86" y="1.53" ellipseWidth="62" anchorOffsetX="0" anchorOffsetY="0" fillColor="0x47912F" rotation="135" visible="false"/>
-	<e:Rect width="603.26" height="67" x="22.87" y="-48" ellipseWidth="62" anchorOffsetX="0" anchorOffsetY="0" fillColor="0x47912F" rotation="0" visible="false"/>
-	<e:Image id="ball" source="ball_pinball_png" height="20"  x="316" y="342"/>
+	<e:Image id="ball" source="ball_pinball_png" height="20"/>
 	<e:Image id="startBtn" source="Sta_png" horizontalCenter="0" verticalCenter="0" left="234" right="234"/>
-	<e:Panel id="overPanel" width="640" height="1118" anchorOffsetX="0" anchorOffsetY="0" visible="false">
+	<e:Panel id="overPanel" anchorOffsetX="0" anchorOffsetY="0" visible="false">
 		<e:Label text="游戏结束"  y="-1.5" horizontalCenter="-4" bold="true" size="50" textColor="0x271f5b"/>
 		<e:Label id="overScore" text="最终得分：999999"  y="55" horizontalCenter="0" bold="true" size="40" textColor="0xbf3171"/>
 	</e:Panel>

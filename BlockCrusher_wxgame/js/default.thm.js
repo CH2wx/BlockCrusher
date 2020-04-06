@@ -674,26 +674,20 @@ var egret = window.egret;window.skins=window.skins||{};
 	__extends(MainSceneSkin, _super);
 	function MainSceneSkin() {
 		_super.call(this);
-		this.skinParts = ["Bg","player","scoreBg","scoreLabel","score","scoreGroup","rectContainer","gameName","ball","startBtn","overScore","overPanel"];
+		this.skinParts = ["bg","player","scoreBg","scoreLabel","score","scoreGroup","rectContainer","gameName","ball","startBtn","overScore","overPanel"];
 		
 		this.height = 1120;
 		this.width = 640;
-		this.elementsContent = [this.Bg_i(),this.player_i(),this.scoreGroup_i(),this.rectContainer_i(),this.gameName_i(),this._Rect1_i(),this._Rect2_i(),this._Rect3_i(),this.ball_i(),this.startBtn_i(),this.overPanel_i()];
+		this.elementsContent = [this.bg_i(),this.player_i(),this.scoreGroup_i(),this.rectContainer_i(),this.gameName_i(),this.ball_i(),this.startBtn_i(),this.overPanel_i()];
 	}
 	var _proto = MainSceneSkin.prototype;
 
-	_proto.Bg_i = function () {
+	_proto.bg_i = function () {
 		var t = new eui.Image();
-		this.Bg = t;
-		t.bottom = 0;
-		t.horizontalCenter = 0;
-		t.left = 0;
-		t.percentHeight = 100;
-		t.percentWidth = 100;
-		t.right = 0;
+		this.bg = t;
 		t.source = "bg.jpg";
-		t.top = 0;
-		t.verticalCenter = 0;
+		t.x = 0;
+		t.y = 0;
 		return t;
 	};
 	_proto.player_i = function () {
@@ -701,17 +695,11 @@ var egret = window.egret;window.skins=window.skins||{};
 		this.player = t;
 		t.height = 25;
 		t.source = "bat_huge_png";
-		t.x = 272;
-		t.y = 1010;
 		return t;
 	};
 	_proto.scoreGroup_i = function () {
 		var t = new eui.Group();
 		this.scoreGroup = t;
-		t.bottom = 0;
-		t.left = 0;
-		t.right = 0;
-		t.top = 0;
 		t.elementsContent = [this.scoreBg_i(),this.scoreLabel_i(),this.score_i()];
 		return t;
 	};
@@ -758,8 +746,6 @@ var egret = window.egret;window.skins=window.skins||{};
 		this.rectContainer = t;
 		t.anchorOffsetX = 0;
 		t.anchorOffsetY = 0;
-		t.height = 649;
-		t.width = 640;
 		t.x = 0;
 		t.y = 0;
 		return t;
@@ -779,55 +765,11 @@ var egret = window.egret;window.skins=window.skins||{};
 		t.y = 282;
 		return t;
 	};
-	_proto._Rect1_i = function () {
-		var t = new eui.Rect();
-		t.anchorOffsetX = 0;
-		t.anchorOffsetY = 0;
-		t.ellipseWidth = 62;
-		t.fillColor = 0x47912f;
-		t.height = 80;
-		t.rotation = 45;
-		t.visible = false;
-		t.width = 130.26;
-		t.x = 606.57;
-		t.y = -55.04;
-		return t;
-	};
-	_proto._Rect2_i = function () {
-		var t = new eui.Rect();
-		t.anchorOffsetX = 0;
-		t.anchorOffsetY = 0;
-		t.ellipseWidth = 62;
-		t.fillColor = 0x47912F;
-		t.height = 80;
-		t.rotation = 135;
-		t.visible = false;
-		t.width = 130.26;
-		t.x = 86;
-		t.y = 1.53;
-		return t;
-	};
-	_proto._Rect3_i = function () {
-		var t = new eui.Rect();
-		t.anchorOffsetX = 0;
-		t.anchorOffsetY = 0;
-		t.ellipseWidth = 62;
-		t.fillColor = 0x47912F;
-		t.height = 67;
-		t.rotation = 0;
-		t.visible = false;
-		t.width = 603.26;
-		t.x = 22.87;
-		t.y = -48;
-		return t;
-	};
 	_proto.ball_i = function () {
 		var t = new eui.Image();
 		this.ball = t;
 		t.height = 20;
 		t.source = "ball_pinball_png";
-		t.x = 316;
-		t.y = 342;
 		return t;
 	};
 	_proto.startBtn_i = function () {
@@ -845,9 +787,7 @@ var egret = window.egret;window.skins=window.skins||{};
 		this.overPanel = t;
 		t.anchorOffsetX = 0;
 		t.anchorOffsetY = 0;
-		t.height = 1118;
 		t.visible = false;
-		t.width = 640;
 		t.elementsContent = [this._Label1_i(),this.overScore_i()];
 		return t;
 	};

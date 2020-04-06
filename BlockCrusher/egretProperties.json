@@ -15,12 +15,6 @@
             "name": "assetsmanager"
         },
         {
-            "name": "tween"
-        },
-        {
-            "name": "promise"
-        },
-        {
             "name": "WXCloudApi",
             "path": "./libs/WXCloudApi"
         }
