@@ -5,8 +5,61 @@
 class WxgamePlatform {
 
     name = 'wxgame'
+    applyJurisdiction() {
+        wx.getSetting({
+            success: (res) => {
+                var status = res.authSetting;
+                if (!status['scope.userInfo'])
+                {
+                    wx.authorize({
+                        scope: 'scope.userInfo',
+                        success: (res) => {
+                            //授权成功后打开排行榜
+                            console.log("打开排行榜");
+                        }, fail: (res) => {
+                            wx.showModal({
+                                title: '是否授权用户信息',
+                                content: '需要获取您的用户信息，请确认授权，否则排行榜功能将无法使用',
+                                success: function (tip) {
+                                    if (tip.confirm) {
+                                        wx.openSetting({
+                                        success: (res) => {
+                                            if (res.authSetting["scope.userInfo"]) {
+                                                wx.showToast({
+                                                title: '授权成功！',
+                                                icon: 'success',
+                                                duration: 1000
+                                                });
+                                                //授权成功后打开排行榜
+                                                console.log("打开排行榜");
+                                            }
+                                            else {
+                                                wx.showToast({
+                                                    title: '授权失败！',
+                                                    icon: 'success',
+                                                    duration: 1000
+                                                });
+                                            }
+                                        },
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            }, fail: (res) => {
+                wx.showToast({
+                title: '调用授权窗口失败！',
+                icon: 'success',
+                duration: 1000
+                });
+            }
+        })
+    }
 
     login() {
+        this.applyJurisdiction();
         return new Promise((resolve, reject) => {
             wx.login({
                 success: (res) => {

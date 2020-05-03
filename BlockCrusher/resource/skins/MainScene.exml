@@ -11,8 +11,5 @@
 	<e:Label id="gameName" text="打  砖  块" height="60" fontFamily="Arial" textColor="0xf25e5e" size="50" textAlign="center" anchorOffsetX="0" verticalAlign="middle" y="282" horizontalCenter="0"/>
 	<e:Image id="ball" source="ball_pinball_png" height="20"/>
 	<e:Image id="startBtn" source="Sta_png" horizontalCenter="0" verticalCenter="0" left="234" right="234"/>
-	<e:Panel id="overPanel" anchorOffsetX="0" anchorOffsetY="0" visible="false">
-		<e:Label text="游戏结束"  y="-1.5" horizontalCenter="-4" bold="true" size="50" textColor="0x271f5b"/>
-		<e:Label id="overScore" text="最终得分：999999"  y="55" horizontalCenter="0" bold="true" size="40" textColor="0xbf3171"/>
-	</e:Panel>
+
 </e:Skin>

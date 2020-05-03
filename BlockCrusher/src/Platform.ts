@@ -8,7 +8,8 @@ declare interface Platform {
 
     getUserInfo(): Promise<any>;
 
-    login(): Promise<any>
+    login(): Promise<any>;
+    openDataContext: any;
 
 }
 
@@ -19,6 +20,7 @@ class DebugPlatform implements Platform {
     async login() {
 
     }
+    openDataContext: any;
 }
 
 

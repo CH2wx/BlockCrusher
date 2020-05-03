@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,description_json,ball_pinball_png,bat_huge_png,bg.jpg,Sta_png,stone_png",
+			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,description_json,ball_pinball_png,bat_huge_png,bg.jpg,Sta_png,stone_png,closeBtn",
 			"name": "preload"
 		}
 	],
@@ -160,6 +160,16 @@
 			"url": "assets/image/stone.png",
 			"type": "image",
 			"name": "stone_png"
+		},
+		{
+			"url": "assets/image/rankBtn.png",
+			"type": "image",
+			"name": "rankBtn"
+		},
+		{
+			"url": "assets/image/closeBtn.png",
+			"type": "image",
+			"name": "closeBtn"
 		}
 	]
 }

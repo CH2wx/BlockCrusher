@@ -674,11 +674,11 @@ var egret = window.egret;window.skins=window.skins||{};
 	__extends(MainSceneSkin, _super);
 	function MainSceneSkin() {
 		_super.call(this);
-		this.skinParts = ["bg","player","scoreBg","scoreLabel","score","scoreGroup","rectContainer","gameName","ball","startBtn","overScore","overPanel"];
+		this.skinParts = ["bg","player","scoreBg","scoreLabel","score","scoreGroup","rectContainer","gameName","ball","startBtn"];
 		
 		this.height = 1120;
 		this.width = 640;
-		this.elementsContent = [this.bg_i(),this.player_i(),this.scoreGroup_i(),this.rectContainer_i(),this.gameName_i(),this.ball_i(),this.startBtn_i(),this.overPanel_i()];
+		this.elementsContent = [this.bg_i(),this.player_i(),this.scoreGroup_i(),this.rectContainer_i(),this.gameName_i(),this.ball_i(),this.startBtn_i()];
 	}
 	var _proto = MainSceneSkin.prototype;
 
@@ -780,36 +780,6 @@ var egret = window.egret;window.skins=window.skins||{};
 		t.right = 234;
 		t.source = "Sta_png";
 		t.verticalCenter = 0;
-		return t;
-	};
-	_proto.overPanel_i = function () {
-		var t = new eui.Panel();
-		this.overPanel = t;
-		t.anchorOffsetX = 0;
-		t.anchorOffsetY = 0;
-		t.visible = false;
-		t.elementsContent = [this._Label1_i(),this.overScore_i()];
-		return t;
-	};
-	_proto._Label1_i = function () {
-		var t = new eui.Label();
-		t.bold = true;
-		t.horizontalCenter = -4;
-		t.size = 50;
-		t.text = "游戏结束";
-		t.textColor = 0x271f5b;
-		t.y = -1.5;
-		return t;
-	};
-	_proto.overScore_i = function () {
-		var t = new eui.Label();
-		this.overScore = t;
-		t.bold = true;
-		t.horizontalCenter = 0;
-		t.size = 40;
-		t.text = "最终得分：999999";
-		t.textColor = 0xbf3171;
-		t.y = 55;
 		return t;
 	};
 	return MainSceneSkin;

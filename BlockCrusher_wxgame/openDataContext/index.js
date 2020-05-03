@@ -4,28 +4,10 @@
  * 并在主域中渲染此 SharedCanvas
  */
 
- //创建开放数据域显示对象，离屏画布的显示对象可直接在主域中通过以下的方式进行创建，创建的显示对象为 egre.Bitmap 类型，可直接添加到舞台上。
-var platform = window.platform;
-this.bitmap = platform.openDataContext.createDisplayObject(null, this.stage.stageWidth, this.stage.stageHeight);
 
-//通过主域与开放数据域的单向数据接口进行通讯，主域可向开放数据域单方向发送消息。
-platform.openDataContext.postMessage({
-  isRanking : this.isRankClick,
-  text : "egret",
-  year : (new Date()).getFullYear(),
-  command : "open"
-});
 
-//子域接收信息
-wx.onMessage((data) => {
-  if(data.command == 'open'){
-    //显示开放域
-    if(!hasCreateScene){
-      //创建并初始化
-      hasCreateScene = createScene();
-    }
-  }
-});
+
+
 
 /**
  * 资源加载组，将所需资源地址以及引用名进行注册
@@ -44,7 +26,6 @@ const assetsUrl = {
  * 之后可通过assets.引用名方式进行获取
  */
 let assets = {};
-console.log();
 /**
  * canvas 大小
  * 这里暂时写死
@@ -59,109 +40,7 @@ let canvasHeight;
 const context = sharedCanvas.getContext("2d");
 context.globalCompositeOperation = "source-over";
 
-
-/**
- * 所有头像数据
- * 包括姓名，头像图片，得分
- * 排位序号i会根据parge*perPageNum+i+1进行计算
- */
-const totalGroup = [{
-    key: 1,
-    name: "1111111111",
-    url: assets.icon,
-    scroes: 10000
-  },
-  {
-    key: 2,
-    name: "2222222222",
-    url: assets.icon,
-    scroes: 9000
-  },
-  {
-    key: 3,
-    name: "3333333",
-    url: assets.icon,
-    scroes: 8000
-  },
-  {
-    key: 4,
-    name: "4444444",
-    url: assets.icon,
-    scroes: 7000
-  },
-  {
-    key: 5,
-    name: "55555555",
-    url: assets.icon,
-    scroes: 6000
-  },
-  {
-    key: 6,
-    name: "6666666",
-    url: assets.icon,
-    scroes: 5000
-  },
-  {
-    key: 7,
-    name: "7777777",
-    url: assets.icon,
-    scroes: 4000
-  },
-  {
-    key: 8,
-    name: "8888888",
-    url: assets.icon,
-    scroes: 3000
-  },
-  {
-    key: 9,
-    name: "9999999",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 10,
-    name: "1010101010",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 11,
-    name: "111111111111",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 12,
-    name: "121212121212",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 13,
-    name: "13131313",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 14,
-    name: "1414141414",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 15,
-    name: "1515151515",
-    url: assets.icon,
-    scroes: 2000
-  },
-  {
-    key: 16,
-    name: "1616161616",
-    url: assets.icon,
-    scroes: 2000
-  },
-];
+var userInfoList = [];
 
 /**
  * 创建排行榜
@@ -179,12 +58,15 @@ function drawRankPanel() {
 
   //起始id
   const startID = perPageMaxNum * page;
-  currentGroup = totalGroup.slice(startID, startID + perPageMaxNum);
+  currentGroup = userInfoList.slice(startID, startID + perPageMaxNum);
   //创建头像Bar
   drawRankByGroup(currentGroup);
   //创建按钮
-  drawButton()
+  drawButton();
+  //绘制最高分
+  setCurRoundScore();
 }
+
 /**
  * 根据屏幕大小初始化所有绘制数据
  */
@@ -222,8 +104,8 @@ function init() {
  * 创建两个点击按钮
  */
 function drawButton() {
-  context_drawImage(assets.button, nextButtonX, nextButtonY, buttonWidth, buttonHeight);
-  context_drawImage(assets.button, lastButtonX, lastButtonY, buttonWidth, buttonHeight);
+  context_drawImage(assets.button, nextButtonX, nextButtonY, buttonWidth, buttonHeight, "下一页");
+  context_drawImage(assets.button, lastButtonX, lastButtonY, buttonWidth, buttonHeight, "上一页");
 }
 
 
@@ -242,21 +124,41 @@ function drawRankByGroup(currentGroup) {
  */
 function drawByData(data, i) {
   let x = startX;
-  //绘制底框
-  context_drawImage(assets.box, startX, startY + i * preOffsetY, barWidth, barHeight);
-  x += 10;
-  //设置字体
-  context.font = fontSize + "px Arial";
+  let headX = startX + indexWidth + intervalX;
   //绘制序号
-  context.fillText(data.key + "", x, startY + i * preOffsetY + textOffsetY, textMaxSize);
+  context.fillStyle = "#888489";
+  if (i == 0) {
+    context.fillStyle = "#FC670A";
+  } else if (i == 1) {
+    context.fillStyle = "#FF004C";
+  } else if (i == 2) {
+    context.fillStyle = "#0019FF";
+  }
+
+  // context.font = "34px Microsoft YaHei";
+  context.font = Math.floor(stageWidth / 25) + "px Microsoft YaHei";
+  context.fillText(data.key + "", x, startY + i * preOffsetY + textOffsetY, 50);
   x += indexWidth + intervalX;
   //绘制头像
-  context_drawImage(assets.icon, x, startY + i * preOffsetY + (barHeight - avatarSize) / 2, avatarSize, avatarSize);
+  let img = wx.createImage();
+  img.src = data.url;
+  img.onload = function () {
+    context.save();
+    context.beginPath(); //开始绘制
+    context.arc(headX + (avatarSize / 2), startY + i * preOffsetY + (barHeight - avatarSize) / 2 + (avatarSize / 2), avatarSize / 2, 0, Math.PI * 2, false);
+    context.clip();
+    context.drawImage(img, headX, startY + i * preOffsetY + (barHeight - avatarSize) / 2, avatarSize, avatarSize);
+    context.restore(); //恢复之前保存的绘图上下文 恢复之前保存的绘图上下午即状态 还可以继续绘制
+  }
   x += avatarSize + intervalX;
   //绘制名称
+  context.fillStyle = "#888489";
+  context.font = Math.floor(stageWidth / 28) + "px Arial";
   context.fillText(data.name + "", x, startY + i * preOffsetY + textOffsetY, textMaxSize);
   x += textMaxSize + intervalX;
   //绘制分数
+  context.fillStyle = "#09E0EF";
+  context.font = Math.floor(stageWidth / 25) + "px Microsoft YaHei";
   context.fillText(data.scroes + "", x, startY + i * preOffsetY + textOffsetY, textMaxSize);
 }
 
@@ -271,17 +173,15 @@ function onTouchEnd(event) {
     //在last按钮的范围内
     if (page > 0) {
       buttonClick(0);
-
     }
   }
   if (x > nextButtonX && x < nextButtonX + buttonWidth &&
     y > nextButtonY && y < nextButtonY + buttonHeight) {
     //在next按钮的范围内
-    if ((page + 1) * perPageMaxNum < totalGroup.length) {
+    if ((page + 1) * perPageMaxNum < userInfoList.length) {
       buttonClick(1);
     }
   }
-
 }
 /**
  * 根据传入的buttonKey 执行点击处理
@@ -443,7 +343,48 @@ wx.onTouchEnd((event) => {
     onTouchEnd(event.changedTouches[i]);
   }
 });
+/**
+ * 根据绘制信息以及当前i绘制元素
+ */
+function drawByData(data, i) {
+  let x = startX;
+  let headX = startX + indexWidth + intervalX;
+  //绘制序号
+  context.fillStyle = "#888489";
+  if (i == 0) {
+    context.fillStyle = "#FC670A";
+  } else if (i == 1) {
+    context.fillStyle = "#FF004C";
+  } else if (i == 2) {
+    context.fillStyle = "#0019FF";
+  }
 
+  // context.font = "34px Microsoft YaHei";
+  context.font = Math.floor(stageWidth / 25) + "px Microsoft YaHei";
+  context.fillText(data.key + "", x, startY + i * preOffsetY + textOffsetY, 50);
+  x += indexWidth + intervalX;
+  //绘制头像
+  let img = wx.createImage();
+  img.src = data.url;
+  img.onload = function () {
+    context.save();
+    context.beginPath(); //开始绘制
+    context.arc(headX + (avatarSize / 2), startY + i * preOffsetY + (barHeight - avatarSize) / 2 + (avatarSize / 2), avatarSize / 2, 0, Math.PI * 2, false);
+    context.clip();
+    context.drawImage(img, headX, startY + i * preOffsetY + (barHeight - avatarSize) / 2, avatarSize, avatarSize);
+    context.restore(); //恢复之前保存的绘图上下文 恢复之前保存的绘图上下午即状态 还可以继续绘制
+  }
+  x += avatarSize + intervalX;
+  //绘制名称
+  context.fillStyle = "#888489";
+  context.font = Math.floor(stageWidth / 28) + "px Arial";
+  context.fillText(data.name + "", x, startY + i * preOffsetY + textOffsetY, textMaxSize);
+  x += textMaxSize + intervalX;
+  //绘制分数
+  context.fillStyle = "#09E0EF";
+  context.font = Math.floor(stageWidth / 25) + "px Microsoft YaHei";
+  context.fillText(data.scroes + "", x, startY + i * preOffsetY + textOffsetY, textMaxSize);
+}
 
 /**
  * 是否加载过资源的标记量
@@ -465,28 +406,33 @@ function preloadAssets() {
         // console.log("加载完成");
         hasLoadRes = true;
       }
-
     }
     img.src = assetsUrl[asset];
     assets[asset] = img;
   }
 }
 
-
 /**
  * 绘制屏幕
  * 这个函数会在加载完所有资源之后被调用
  */
 function createScene() {
-  if (sharedCanvas.width && sharedCanvas.height) {
-    // console.log('初始化完成')
+  // if (sharedCanvas.width && sharedCanvas.height) {
     stageWidth = sharedCanvas.width;
     stageHeight = sharedCanvas.height;
     init();
     return true;
-  } else {
-    console.log('创建开放数据域失败，请检查是否加载开放数据域资源');
-    return false;
+  // } else {
+  //   console.log('创建开放数据域失败，请检查是否加载开放数据域资源');
+  //   return false;
+  // }
+}
+
+function getKVValueByKey(kvDataList, key) {
+  for (let kvData of kvDataList) {
+    if (kvData.key == key) {
+      return kvData.value;
+    }
   }
 }
 
@@ -499,15 +445,31 @@ let hasCreateScene;
  * 增加来自主域的监听函数
  */
 function addOpenDataContextListener() {
-  console.log('增加监听函数')
   wx.onMessage((data) => {
-    console.log(data);
     if (data.command == 'open') {
-      if (!hasCreateScene) {
-        //创建并初始化
-        hasCreateScene = createScene();
-      }
-      requestAnimationFrameID = requestAnimationFrame(loop);
+      curScore.score = ~~data.curScore;
+      wx.getUserCloudStorage({
+        keyList: ["score"],
+        success: function (callBackData) {
+          //获取玩家数据成功
+          let kvDataList = callBackData.KVDataList;
+          let oldScore = ~~getKVValueByKey(kvDataList, "score");
+          if (oldScore < curScore.score) {
+            //破纪录
+            curScore.isMax = true;
+            wx.setUserCloudStorage({
+              KVDataList: [{
+                key: "score",
+                value: curScore.score.toString()
+              }],
+              success: handleFriends()
+            })
+          } else {
+            curScore.isMax = false;
+            handleFriends();
+          }
+        }
+      })
     } else if (data.command == 'close' && requestAnimationFrameID) {
       cancelAnimationFrame(requestAnimationFrameID);
       requestAnimationFrameID = null
@@ -516,13 +478,89 @@ function addOpenDataContextListener() {
        * 加载资源函数
        * 只需要加载一次
        */
-      // console.log('加载资源')
       preloadAssets();
     }
   });
 }
 
 addOpenDataContextListener();
+
+var curScore = {isMax:false, score:0};
+/**
+ * 最高分
+ */
+function setCurRoundScore() {
+  // if (!curScore.isMax)
+  //   return;
+  let maxSocreX = offsetX_rankToBorder + rankWidth * 0.25; //最高分的x坐标
+  let maxSocreY = offsetY_rankToBorder + 50;
+  context.fillStyle = "#FF0000";
+  context.font = Math.floor(stageWidth / 18) + "px Microsoft YaHei";
+  context.fillText((curScore.isMax ? "打破记录：" : "本轮获得分数：") + curScore.score.toString() + "！", maxSocreX, maxSocreY);
+}
+
+function handleFriends() {
+  wx.getFriendCloudStorage({
+    keyList: ["score"],
+    success: function (callBackData) {
+      userInfoList = [];
+      let data = callBackData.data;
+      //获取同玩数据成功
+      for (let i = 0; i < data.length; i++) {
+        let userData = data[i];
+
+        // console.log("unionId = " + userData.unionId);
+        console.log(userData);
+
+        let avatarUrl = userData.avatarUrl;
+        let nickname = userData.nickname;
+        let curScore = 0;
+        let KVDataList = userData.KVDataList;
+        for (let kvData of KVDataList) {
+          if (kvData.key == "score") {
+            curScore = ~~kvData.value;
+          }
+        }
+        let playerData = {
+          key: 0,
+          name: "",
+          url: assets.icon,
+          scroes: 0
+        }
+
+        playerData.key = i + 1;
+        playerData.name = nickname;
+        playerData.url = avatarUrl;
+        playerData.scroes = curScore;
+        userInfoList.push(playerData);
+      }
+
+      let compare = function (a, b) {//比较函数
+        if (a.scroes < b.scroes) {
+          return 1;
+        } else if (a.scroes > b.scroes) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+      userInfoList.sort(compare);
+      for (let i = 0; i < userInfoList.length; i++) {
+        let userInfo = userInfoList[i];
+        userInfo.key = i + 1;
+      }
+
+      if (!hasCreateScene) {
+        //创建并初始化
+        hasCreateScene = createScene();
+      }
+      requestAnimationFrameID = requestAnimationFrame(loop);
+
+      context.clearRect(0, 0, sharedCanvas.width, sharedCanvas.height);
+      drawRankPanel();
+    }
+  });
+}
 
 /**
  * 循环函数
@@ -543,12 +581,16 @@ function loop() {
 /**
  * 图片绘制函数
  */
-function context_drawImage(image, x, y, width, height) {
+function context_drawImage(image, x, y, width, height, txtContent = "") {
   if (image.width != 0 && image.height != 0 && context) {
     if (width && height) {
       context.drawImage(image, x, y, width, height);
     } else {
       context.drawImage(image, x, y);
+    }
+    if (txtContent != null && txtContent != "")
+    {
+      context.fillText(txtContent, x + image.width / 2, y + height / 2);
     }
   }
 }
